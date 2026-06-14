@@ -80,9 +80,9 @@ Therefore, a layer that reliably reads the declaration and performs a determinis
 
 ---
 
-## 4. Agent Skills for Data Stewards
+## 4. Skills a Data Steward Should Have
 
-We combine DocLang's deterministic metadata with the agent's probabilistic inference. As "skills" for an AI agent, we envisage the following three.
+How data may be handled — its behavior — should be specifiable, deterministically, before any operation. Doing so lets us draw out, with confidence, even the value of unstructured data that until now could not be fully used. The skills a data steward should have, to support this, are the following three.
 
 1. **Structural and semantic inconsistency detection** — Deterministically validate the structural layer, detecting deviations from the expected data model (e.g., open-data specifications) and proposing fixes without breaking the structure.
 2. **Governance and usage-policy auditing** — Mechanically interpret the governance declarations in `<head>` and decide permissibility before an operation. Not a prompt-based "request," but enforcement as a rule bound to the data.

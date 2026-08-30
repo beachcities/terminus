@@ -21,7 +21,7 @@ All of this concerns how to *describe* data correctly and safely — the questio
 
 From machine-readable (can be read), to machine-understandable (the meaning is clear), and then beyond, to "may it be used?" (permissions and policy). This note addresses that final axis.
 
-**DocLang** (LF AI & Data Foundation; a specification working group was launched in June 2026) is an AI-native document format that preserves the structure, semantics, and layout of unstructured content. As for the governance metadata this note is concerned with, the current specification (the v0.7 line) reserves its vocabulary in a **Future Extensions appendix (informative)**. That is, *what can be declared* is already laid out inside the specification — but it is not yet normative, and it is not an enforcement mechanism. The vessel for declarations exists first, while enforcement remains blank — and that situation is precisely the starting point of this note.
+**DocLang** (LF AI & Data Foundation; a specification working group was launched in June 2026) is an AI-native document format that preserves the structure, semantics, and layout of unstructured content. As for the governance metadata this note is concerned with, the current specification (the v0.7 line) reserves its vocabulary in a **Future Extensions section (informative)** — titled Appendix C in v0.4. That is, *what can be declared* is already laid out inside the specification — but it is not yet normative, and it is not an enforcement mechanism. The vessel for declarations exists first, while enforcement remains blank — and that situation is precisely the starting point of this note.
 
 Note that the generational account above is an organization of "properties acquired in sequence," not a technical lineage. **DocLang is not a successor to YAML; it is XML-based** (recommended extension `.dclg`, with `.dclx` for archives; the validation the spec itself defines is XSD, and the reference toolkit additionally provides Schematron checks — `pip install "doclang[schematron-saxon]"`). Nor is it a replacement for structured-data description — its target is unstructured documents.
 
@@ -57,7 +57,7 @@ So the means for "correctness of the data" and "catalog description" are in plac
 
 ## 3. DocLang's Governance Metadata (a Future Extension of the v0.7 Spec)
 
-DocLang designs "how the data may be used" as machine-readable **declarations** placed in the document's `<head>`. These declarations are listed in the specification's Future Extensions appendix, whose text has remained unchanged, word for word, from spec version 0.4 (toolkit v0.4.0) through the current spec version 0.7 (toolkit v0.7.3). The main per-operation controls are as follows.
+DocLang designs "how the data may be used" as machine-readable **declarations** placed in the document's `<head>`. These declarations are listed in the specification's Future Extensions section (Appendix C in v0.4); the governance vocabulary and the definitions of the policy controls are substantively unchanged from spec version 0.4 (toolkit v0.4.0) through the current spec version 0.7 (toolkit v0.7.3). The main per-operation controls are as follows.
 
 | Metadata | What it controls |
 |---|---|
@@ -93,9 +93,9 @@ All three share a common shape: "read the declaration bound to the document, and
 
 ---
 
-## 5. A Reference Implementation: The Governance Core (Sphragis)
+## 5. An Independent Prototype: The Governance Core (Sphragis)
 
-The core of the skills above — the part that reads a governance declaration and returns permissibility before an operation — is released as an independent, task-agnostic, framework-agnostic minimal open-source implementation.
+The core of the skills above — the part that reads a governance declaration and returns permissibility before an operation — is released as an independent, task-agnostic, framework-agnostic minimal open-source prototype. It is not a reference implementation of the specification, and it is unaffiliated with the DocLang project — a single-author proof of concept.
 
 - **Repository**: https://github.com/beachcities/sphragis (Apache-2.0; the core has zero dependencies)
 - **What it does**: Interprets a DocLang `<head>` and returns, for an operation (extract / rag_index / rag_retrieve / train / share_downstream), a deterministic `allow` / `allow_with_obligations` / `deny`. Obligations (required transformation, audit, human-in-the-loop) are surfaced alongside the verdict.

@@ -3,8 +3,9 @@
 
 # Beyond Machine-Readable and Machine-Understandable: May the Machine *Use* It?
 
-**Version**: 2026-06-13
+**Version**: 2026-08-30 (first published 2026-06-13)
 **Status**: A technical concept note on data governance in the age of AI — how to attach "rules for what may be done" to a document, and how to enforce them, in an environment where data, code, and models are tightly coupled. Concrete implementation and application are covered in a separate document.
+**Revision**: 2026-08-30 — updated to match the current state of DocLang (spec version 0.7, reference toolkit v0.7.3): the status of the governance metadata (a future extension, informative), the recommended file extensions, and the validation tooling.
 
 ---
 
@@ -20,9 +21,9 @@ All of this concerns how to *describe* data correctly and safely — the questio
 
 From machine-readable (can be read), to machine-understandable (the meaning is clear), and then beyond, to "may it be used?" (permissions and policy). This note addresses that final axis.
 
-**DocLang** (LF AI & Data Foundation; a specification working group was launched in June 2026) is an AI-native document format for unstructured content that, in addition to preserving structure, semantics, and layout, integrates this governance at the specification level.
+**DocLang** (LF AI & Data Foundation; a specification working group was launched in June 2026) is an AI-native document format that preserves the structure, semantics, and layout of unstructured content. As for the governance metadata this note is concerned with, the current specification (the v0.7 line) reserves its vocabulary in a **Future Extensions section (informative)** — titled Appendix C in v0.4. That is, *what can be declared* is already laid out inside the specification — but it is not yet normative, and it is not an enforcement mechanism. The vessel for declarations exists first, while enforcement remains blank — and that situation is precisely the starting point of this note.
 
-Note that the generational account above is an organization of "properties acquired in sequence," not a technical lineage. **DocLang is not a successor to YAML; it is XML-based** (`.dclg.xml`, validated with XSD plus Schematron, `pip install doclang`). Nor is it a replacement for structured-data description — its target is unstructured documents.
+Note that the generational account above is an organization of "properties acquired in sequence," not a technical lineage. **DocLang is not a successor to YAML; it is XML-based** (recommended extension `.dclg`, with `.dclx` for archives; the validation the spec itself defines is XSD, and the reference toolkit additionally provides Schematron checks — `pip install "doclang[schematron-saxon]"`). Nor is it a replacement for structured-data description — its target is unstructured documents.
 
 ### 1.1 A Fit-for-Purpose Architecture (Guiding Principle)
 
@@ -54,9 +55,9 @@ So the means for "correctness of the data" and "catalog description" are in plac
 
 ---
 
-## 3. DocLang's Governance Metadata (Specification v0.4.0)
+## 3. DocLang's Governance Metadata (a Future Extension of the v0.7 Spec)
 
-DocLang holds "how the data may be used" as machine-readable **declarations** in the document's `<head>`. The main per-operation controls defined in the specification are as follows.
+DocLang designs "how the data may be used" as machine-readable **declarations** placed in the document's `<head>`. These declarations are listed in the specification's Future Extensions section (Appendix C in v0.4); the governance vocabulary and the definitions of the policy controls are substantively unchanged from spec version 0.4 (toolkit v0.4.0) through the current spec version 0.7 (toolkit v0.7.3). The main per-operation controls are as follows.
 
 | Metadata | What it controls |
 |---|---|
@@ -65,7 +66,7 @@ DocLang holds "how the data may be used" as machine-readable **declarations** in
 | `rag_indexing_allowed` | Whether the document may be taken into a RAG index (i.e., whether it may be ingested as RAG answer material) |
 | `training_permitted` | Whether use for model training is allowed |
 
-In addition, Licensing / Data classification / Retention / Compliance frameworks, and detailed PII attributes (`pii_status`, `ai_use_restriction`, etc., with mappings to GDPR, ISO 27701, and the like) are defined.
+In addition, Licensing / Data classification / Retention / Compliance frameworks, and detailed PII attributes (`pii_status`, `ai_use_restriction`, etc., with mappings to GDPR, ISO 27701, and the like) are listed there.
 
 Two properties matter.
 
@@ -74,9 +75,9 @@ Two properties matter.
 
 ### 3.1 Separating Declaration from Enforcement (The Crux of the Design)
 
-What DocLang defines is a machine-readable **declaration**, not an **enforcement mechanism** that controls execution. Merely pasting a declaration into a prompt leaves it as a *request*.
+What DocLang defines is a machine-readable **declaration**, not an **enforcement mechanism** that controls execution — and in the current specification, the vocabulary of these declarations itself still sits in an informative future extension. Merely pasting a declaration into a prompt leaves it as a *request*.
 
-Therefore, a layer that reliably reads the declaration and performs a deterministic check and block **before** the LLM's probabilistic inference must be implemented on our side. This is the crux of the skills in the next section, and the keystone of this concept as a whole.
+Therefore, a layer that reliably reads the declaration and performs a deterministic check and block **before** the LLM's probabilistic inference must be implemented on our side. There is no need to wait for the declaration vocabulary to become normative — the reading-and-blocking layer can be implemented today. This is the crux of the skills in the next section, and the keystone of this concept as a whole.
 
 ---
 
@@ -92,9 +93,9 @@ All three share a common shape: "read the declaration bound to the document, and
 
 ---
 
-## 5. A Reference Implementation: The Governance Core (Sphragis)
+## 5. An Independent Prototype: The Governance Core (Sphragis)
 
-The core of the skills above — the part that reads a governance declaration and returns permissibility before an operation — is released as an independent, task-agnostic, framework-agnostic minimal open-source implementation.
+The core of the skills above — the part that reads a governance declaration and returns permissibility before an operation — is released as an independent, task-agnostic, framework-agnostic minimal open-source prototype. It is not a reference implementation of the specification, and it is unaffiliated with the DocLang project — a single-author proof of concept.
 
 - **Repository**: https://github.com/beachcities/sphragis (Apache-2.0; the core has zero dependencies)
 - **What it does**: Interprets a DocLang `<head>` and returns, for an operation (extract / rag_index / rag_retrieve / train / share_downstream), a deterministic `allow` / `allow_with_obligations` / `deny`. Obligations (required transformation, audit, human-in-the-loop) are surfaced alongside the verdict.

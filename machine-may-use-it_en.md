@@ -5,7 +5,7 @@
 
 **Version**: 2026-08-30 (first published 2026-06-13)
 **Status**: A technical concept note on data governance in the age of AI — how to attach "rules for what may be done" to a document, and how to enforce them, in an environment where data, code, and models are tightly coupled. Concrete implementation and application are covered in a separate document.
-**Revision**: 2026-08-30 — updated to match the current state of the DocLang specification (v0.7.3): the status of the governance metadata (a future extension, informative), the recommended file extensions, and the validation tooling.
+**Revision**: 2026-08-30 — updated to match the current state of DocLang (spec version 0.7, reference toolkit v0.7.3): the status of the governance metadata (a future extension, informative), the recommended file extensions, and the validation tooling.
 
 ---
 
@@ -57,7 +57,7 @@ So the means for "correctness of the data" and "catalog description" are in plac
 
 ## 3. DocLang's Governance Metadata (a Future Extension of the v0.7 Spec)
 
-DocLang designs "how the data may be used" as machine-readable **declarations** placed in the document's `<head>`. These declarations are listed in the specification's Future Extensions appendix, whose text has remained unchanged, word for word, from v0.4.0 through the current v0.7.3. The main per-operation controls are as follows.
+DocLang designs "how the data may be used" as machine-readable **declarations** placed in the document's `<head>`. These declarations are listed in the specification's Future Extensions appendix, whose text has remained unchanged, word for word, from spec version 0.4 (toolkit v0.4.0) through the current spec version 0.7 (toolkit v0.7.3). The main per-operation controls are as follows.
 
 | Metadata | What it controls |
 |---|---|
